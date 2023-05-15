@@ -1,16 +1,34 @@
-# This is a sample Python script.
+from BalancedDataCollection import BalancedDataCollectionDriver
+from DataBalancing import DataBalancingDriver
+from DataCollection import DriverClass
 
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+import numpy as np
 
+from DataProcessing import DataPreProcessingDriver
+from DetectionModels import DetectionModelDriver, GRAPHS
+from FinalDataFormating import FinalDataFormatingDriver
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
-
-
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    path = "f22-dataset"
+    # Collects the Images and performs reading the images along with target names
+    (imageData, targetNames) = DriverClass.DriverFunction(path)
+    # DataBalancing
+    originalData = DataBalancingDriver.balancedData(imageData, targetNames, path)
+    # Collect the Balanced Data
+    finalData, finalTargets = BalancedDataCollectionDriver.collectionDriver(originalData, "GenerateData")
+    # Get the final normalized data along with targets
+    normalizedData, labelEncodedTargets = DataPreProcessingDriver.preProcessing(finalData, finalTargets)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    # Final step of Data Formatting
+    finalFormattedData = FinalDataFormatingDriver.driver(normalizedData, (100, 100))
+
+    # Model Creation, Training, Testing
+    modelHistory = DetectionModelDriver.driver(finalFormattedData, labelEncodedTargets)
+
+    # Plotting Graphs
+    GRAPHS.plots(modelHistory)
+
+
+
+
+
