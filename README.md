@@ -10,5 +10,5 @@ Automated attendance system using face detection
 2. Run the main file.
 
 The main consists of python code to run the Face Detection project. 
-The code is automated where the data manipulation goes in format of pipeline.
+The code is automated where the data manipulation goes in flow like pipeline.
 
